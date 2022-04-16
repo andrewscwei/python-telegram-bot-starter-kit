@@ -1,21 +1,16 @@
 version: "3.8"
 services:
   app:
-    image: ${IMAGE_NAME}:${IMAGE_TAG:-dev}
+    image: ${IMAGE_NAME}:${IMAGE_TAG:-test}
     container_name: app
-    command: flask run --port 8080 --host 0.0.0.0
+    command: pytest
     environment:
       BOT_TOKEN: $BOT_TOKEN
       DATABASE_URL: postgresql://postgres:postgres@db:5432/core
-      FLASK_ENV: development
-      FLASK_APP: main
+      PORT: 8080
       REBASE_URL: $REBASE_URL
     ports:
       - 8080:8080
-    volumes:
-      - ./config.py:/var/app/config.py
-      - ./main.py:/var/app/main.py
-      - ./app:/var/app/app
     links:
       - db
     depends_on:
