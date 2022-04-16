@@ -1,0 +1,4 @@
+{
+  "python.linting.pylintArgs": ["--load-plugins", "pylint_flask_sqlalchemy"],
+  "python.sortImports.args": ["--src=${workspaceFolder}"]
+}
