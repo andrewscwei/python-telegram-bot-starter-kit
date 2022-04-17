@@ -7,7 +7,7 @@ on:
     types: [published]
 env:
   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-  HEROKU_APP_NAME: python-telegram-bot-starter-kit
+  HEROKU_APP_NAME: py-telegram-bot-starter-kit
   BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
 jobs:
   build:
@@ -30,13 +30,6 @@ jobs:
           target: test
       - name: Run tests
         run: make test name=image tag=test
-      - name: Build release target
-        uses: docker/build-push-action@v2
-        with:
-          cache-from: type=gha,scope=${{ github.workflow }}
-          cache-to: type=gha,scope=${{ github.workflow }},mode=max
-          context: .
-          push: false
   deploy:
     name: Deploy
     needs: [build]
@@ -45,6 +38,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Deploy to Heroku
+        run: .github/workflows/deploy_to_heroku.sh
       - name: Create release
         uses: actions/create-release@v1
         env:
@@ -55,5 +50,3 @@ jobs:
           body_path: RELEASE.md
           draft: false
           prerelease: false
-      - name: Deploy to Heroku
-        run: .github/workflows/deploy_to_heroku.sh
